@@ -16,11 +16,7 @@ RUN apt-get update &&  apt-get upgrade -y \
     && rm /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu
 	
-#Automatic CitusDB config
-RUN git clone https://github.com/citusdata/cstore_fdw.git /tmp/cstore_fdw \
-	&& cd /tmp/cstore_fdw \
-	&& PATH=/usr/local/pgsql/bin/:$PATH make \
-	&& PATH=/usr/local/pgsql/bin/:$PATH make install
+
 
 
 # make the "en_US.UTF-8" locale so postgres will be utf-8 enabled by default
@@ -45,7 +41,12 @@ ENV PATH /opt/citusdb/$CITUS_MAJOR/bin:$PATH
 ENV PGDATA /data
 VOLUME /data
 
-RUN echo "shared_preload_libraries = 'cstore_fdw'         # (change requires restart)" >> /data/postgresql.conf
+#Automatic CitusDB config
+RUN git clone https://github.com/citusdata/cstore_fdw.git /tmp/cstore_fdw \
+	&& cd /tmp/cstore_fdw \
+	&& PATH=/usr/local/pgsql/bin/:$PATH make \
+	&& PATH=/usr/local/pgsql/bin/:$PATH make install \
+    && echo "shared_preload_libraries = 'cstore_fdw'         # (change requires restart)" >> /data/postgresql.conf
 
 COPY docker-entrypoint.sh /
 COPY reload-workers.sh /
