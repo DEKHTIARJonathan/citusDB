@@ -40,11 +40,6 @@ if [ "$1" = 'postgres' ]; then
         if [ "$POSTGRES_DB" != 'postgres' ]; then
             gosu postgres postgres --single -jE <<-EOSQL
 				CREATE DATABASE "$POSTGRES_DB" ;
-				-- load extension first time after install
-				CREATE EXTENSION cstore_fdw;
-
-				-- create server object
-				CREATE SERVER cstore_server FOREIGN DATA WRAPPER cstore_fdw;
 			EOSQL
             echo
         fi
@@ -67,12 +62,25 @@ if [ "$1" = 'postgres' ]; then
                 [ -f "$f" ] && . "$f"
             done
         fi
+		
+		
+	
     fi
 
     if [ "$CITUS_MASTER" ]; then
         echo "Loading linked citus workers"
         . /reload-workers.sh
     fi
+	
+	gosu postgres postgres --single -jE <<-EOSQL
+		-- load extension first time after install
+		CREATE EXTENSION cstore_fdw;
+
+		-- create server object
+		CREATE SERVER cstore_server FOREIGN DATA WRAPPER cstore_fdw;
+	EOSQL
+	echo
+	
     exec gosu postgres "$@"
 fi
 
