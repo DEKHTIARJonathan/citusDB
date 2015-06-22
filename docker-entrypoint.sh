@@ -82,6 +82,9 @@ if [ "$1" = 'postgres' ]; then
 	echo
 	
     exec gosu postgres "$@"
+	
+	mkdir -p /opt/citusdb/4.0/cstore/
+	chown postgres:postgres /opt/citusdb/4.0/cstore/
 fi
 
 exec "$@"
