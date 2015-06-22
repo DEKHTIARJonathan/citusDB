@@ -53,5 +53,8 @@ COPY reload-workers.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
+RUN mkdir -p /opt/citusdb/4.0/cstore/ && \
+	chown postgres:postgres /opt/citusdb/4.0/cstore/
+
 EXPOSE 5432
 CMD ["postgres"]
