@@ -54,7 +54,8 @@ COPY reload-workers.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 RUN mkdir -p /opt/citusdb/4.0/cstore/ && \
-	chown postgres:postgres /opt/citusdb/4.0/cstore/
+	chown postgres:postgres /opt/citusdb/4.0/cstore/ && \
+	sed -i '68s/.*/max_connections = 300                   # (change requires restart)/'  /data/postgresql.conf
 
 EXPOSE 5432
 CMD ["postgres"]
