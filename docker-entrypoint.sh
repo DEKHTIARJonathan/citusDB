@@ -9,6 +9,8 @@ if [ "$1" = 'postgres' ]; then
 
         sed -ri "s/^#(listen_addresses\s*=\s*)\S+/\1'*'/" "$PGDATA"/postgresql.conf
 		sed -i '68s/.*/max_connections = 300                   # (change requires restart)/'  "$PGDATA"/postgresql.conf
+		sed -i "151s/.*/shared_preload_libraries = 'cstore_fdw'         # (change requires restart)" >> "$PGDATA"/postgresql.conf
+		echo "$PGDATA"
 
         # check password first so we can ouptut the warning before postgres
         # messes it up

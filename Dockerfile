@@ -45,8 +45,7 @@ VOLUME /data
 RUN git clone https://github.com/citusdata/cstore_fdw.git /tmp/cstore_fdw \
 	&& cd /tmp/cstore_fdw \
 	&& PATH=/usr/local/pgsql/bin/:$PATH make \
-	&& PATH=/usr/local/pgsql/bin/:$PATH make install \
-    && echo "shared_preload_libraries = 'cstore_fdw'         # (change requires restart)" >> /data/postgresql.conf
+	&& PATH=/usr/local/pgsql/bin/:$PATH make install
 
 COPY docker-entrypoint.sh /
 COPY reload-workers.sh /
