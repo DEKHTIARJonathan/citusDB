@@ -84,4 +84,6 @@ if [ "$1" = 'postgres' ]; then
     exec gosu postgres "$@"
 fi
 
+sed -i '68s/.*/max_connections = 300                   # (change requires restart)/'  /data/postgresql.conf
+
 exec "$@"
