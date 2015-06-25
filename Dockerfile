@@ -50,10 +50,8 @@ RUN git clone https://github.com/citusdata/cstore_fdw.git /tmp/cstore_fdw \
 COPY docker-entrypoint.sh /
 COPY reload-workers.sh /
 
-RUN chmod +x docker-entrypoint.sh && \
-	chmod +x reload-workers.sh && \
-	sed -i '68s/.*/max_connections = 300                   # (change requires restart)/'  "$PGDATA"/postgresql.conf && \
-	sed -i "151s/.*/shared_preload_libraries = 'cstore_fdw'         # (change requires restart)/" "$PGDATA"/postgresql.conf
+RUN chmod +x /docker-entrypoint.sh && \
+	chmod +x /reload-workers.sh
 
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

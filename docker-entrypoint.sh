@@ -84,4 +84,11 @@ if [ "$1" = 'postgres' ]; then
     exec gosu postgres "$@"
 fi
 
+sed -i '68s/.*/max_connections = 300                   # (change requires restart)/'  "$PGDATA"/postgresql.conf
+sed -i '68s/.*/max_connections = 300                   # (change requires restart)/'  /opt/citusdb/4.0/data/postgresql.conf
+sed -i "151s/.*/shared_preload_libraries = 'cstore_fdw'         # (change requires restart)/" "$PGDATA"/postgresql.conf
+sed -i "151s/.*/shared_preload_libraries = 'cstore_fdw'         # (change requires restart)/" /opt/citusdb/4.0/data/postgresql.conf
+gosu postgres pg_ctl stop
+gosu postgres pg_ctl -w start
+
 exec "$@"
